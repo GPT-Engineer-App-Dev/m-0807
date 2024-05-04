@@ -43,17 +43,35 @@ const Index = () => {
         <Input value={inputValue} onChange={handleInputChange} onKeyPress={handleKeyPress} placeholder="Add a new task..." />
         <IconButton icon={<FaPlus />} onClick={addTodo} colorScheme="blue" aria-label="Add todo" />
       </HStack>
+      <Heading mb="4">Active Tasks</Heading>
       <List spacing={3} my={5} w="100%">
-        {todos.map((todo, index) => (
-          <ListItem key={index} p={2} bg="gray.100" borderRadius="md" style={{ textDecoration: isChecked[index] ? "line-through" : "none", opacity: isChecked[index] ? 0.5 : 1 }}>
-            <HStack justify="space-between">
-              <Checkbox colorScheme="green" mr={2} isChecked={isChecked[index]} onChange={() => setIsChecked({ ...isChecked, [index]: !isChecked[index] })}>
-                {todo}
-              </Checkbox>
-              <IconButton icon={<FaTrash />} onClick={() => deleteTodo(index)} colorScheme="red" aria-label="Delete todo" />
-            </HStack>
-          </ListItem>
-        ))}
+        {todos
+          .filter((_, index) => !isChecked[index])
+          .map((todo, index) => (
+            <ListItem key={index} p={2} bg="gray.100" borderRadius="md">
+              <HStack justify="space-between">
+                <Checkbox colorScheme="green" mr={2} isChecked={isChecked[index]} onChange={() => setIsChecked({ ...isChecked, [index]: !isChecked[index] })}>
+                  {todo}
+                </Checkbox>
+                <IconButton icon={<FaTrash />} onClick={() => deleteTodo(index)} colorScheme="red" aria-label="Delete todo" />
+              </HStack>
+            </ListItem>
+          ))}
+      </List>
+      <Heading mb="4">Completed Tasks</Heading>
+      <List spacing={3} my={5} w="100%">
+        {todos
+          .filter((_, index) => isChecked[index])
+          .map((todo, index) => (
+            <ListItem key={index} p={2} bg="gray.100" borderRadius="md" style={{ textDecoration: "line-through", opacity: 0.5 }}>
+              <HStack justify="space-between">
+                <Checkbox colorScheme="green" mr={2} isChecked={isChecked[index]} onChange={() => setIsChecked({ ...isChecked, [index]: !isChecked[index] })}>
+                  {todo}
+                </Checkbox>
+                <IconButton icon={<FaTrash />} onClick={() => deleteTodo(index)} colorScheme="red" aria-label="Delete todo" />
+              </HStack>
+            </ListItem>
+          ))}
       </List>
     </VStack>
   );
